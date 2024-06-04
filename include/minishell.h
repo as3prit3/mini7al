@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/04 18:52:49 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 19:15:54 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,29 @@ typedef struct s_compo
 	struct s_compo	*next;
 	struct s_compo	*prev;
 }			t_compo;
+
+typedef struct s_cmd
+{
+	char			**args;
+	int				in_file;
+	int				out_file;
+	struct s_cmd	*next;
+}			t_cmd;
+
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}			t_env;
+
+typedef struct s_data
+{
+	t_cmd	*cmd;
+	t_env	*envp;
+	t_compo	*tokens;
+	t_list	lst_cmd;
+}			t_data;
 
 	/*lexer_utils*/
 bool	is_special(char c);

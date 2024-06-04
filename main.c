@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:14:20 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/04 18:51:29 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 19:16:48 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	exc_sig(int sig)
 int main()
 {
 	char	*line;
-	t_compo	*tokens_lst;
+	t_data	data;
 
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
@@ -51,11 +51,11 @@ int main()
 		signal(SIGINT, exc_sig);
 		if (ft_readline(&line))
 			continue ;
-		tokens_lst = lexer(line);
-		if (!check_syntax(tokens_lst))
+		data.tokens = lexer(line);
+		if (!check_syntax(data.tokens))
 		{
 			printf("procced to parsing then execution\n");
 		}
-		free_list(tokens_lst);
+		free_list(data.tokens);
 	}
 }
