@@ -6,23 +6,17 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:26:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/05/29 16:46:34 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 19:04:10 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-bool	is_special(char c)
-{
-	return (c == '\'' || c == '\"' || c == '|' || c == '<' || c == '$'
-			|| c == '>' || ft_space(c) || c == '\n' || c == '\0');
-}
-
-void	print(t_lexer *list)
+void	print(t_compo *list)
 {
 	t_compo	*node;
 
-	node = list->head;
+	node = list;
 	while (node)
 	{
 		printf("content: %s", node->content);
@@ -32,7 +26,7 @@ void	print(t_lexer *list)
 	}
 }
 
-int	tokenize(t_lexer *tokens_lst, char *line, int i, enum e_state *state)
+int	tokenize(t_compo **tokens_lst, char *line, int i, enum e_state *state)
 {
 	if (!is_special(line[i]))
 		i += get_word(tokens_lst, line + i, *state);
@@ -58,19 +52,18 @@ int	tokenize(t_lexer *tokens_lst, char *line, int i, enum e_state *state)
 	return (i);
 }
 
-t_lexer	*lexer(char *line)
+t_compo	*lexer(char *line)
 {
-	t_lexer			*tokens_lst;
+	t_compo			*tokens_lst;
 	enum e_state	state;
 	int				i;
 
 	i = 0;
 	state = GENERAL;
 	tokens_lst = NULL;
-	tokens_lst = init_list(tokens_lst);
 	while (line[i])
-		i = tokenize(tokens_lst, line, i, &state);
-	// print(tokens_lst);
+		i = tokenize(&tokens_lst, line, i, &state);
+	print(tokens_lst);
 	free(line);
 	return (tokens_lst);
 }

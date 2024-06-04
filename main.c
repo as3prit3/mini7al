@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:14:20 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/05/29 21:41:31 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 18:51:29 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	exc_sig(int sig)
 int main()
 {
 	char	*line;
-	t_lexer	*tokens_lst;
+	t_compo	*tokens_lst;
 
 	signal(SIGQUIT, SIG_IGN);
 	while (42)

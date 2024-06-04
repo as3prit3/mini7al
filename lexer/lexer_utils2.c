@@ -6,13 +6,19 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 14:14:16 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/05/27 14:36:06 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 18:55:37 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	get_word(t_lexer *list, char *line, enum e_state state)
+bool	is_special(char c)
+{
+	return (c == '\'' || c == '\"' || c == '|' || c == '<' || c == '$'
+			|| c == '>' || ft_space(c) || c == '\n' || c == '\0');
+}
+
+int	get_word(t_compo **list, char *line, enum e_state state)
 {
 	int	i;
 
@@ -23,7 +29,7 @@ int	get_word(t_lexer *list, char *line, enum e_state state)
 	return (i);
 }
 
-void	get_quote(t_lexer *list, char *line, enum e_state *state)
+void	get_quote(t_compo **list, char *line, enum e_state *state)
 {
 	enum e_state	new_state;
 	enum e_type		type;
@@ -52,7 +58,7 @@ void	get_quote(t_lexer *list, char *line, enum e_state *state)
 		add_to_list(list, new_comp(line, 1, *state, type));
 }
 
-int	get_redirection(t_lexer *list, char *line, int i, enum e_state state)
+int	get_redirection(t_compo **list, char *line, int i, enum e_state state)
 {
 	int	j;
 
@@ -76,7 +82,7 @@ int	get_redirection(t_lexer *list, char *line, int i, enum e_state state)
 	return (i - j);
 }
 
-int	get_env(t_lexer *list, char *line, enum e_state state)
+int	get_env(t_compo **list, char *line, enum e_state state)
 {
 	int			i;
 	enum e_type	type1;

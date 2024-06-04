@@ -6,19 +6,11 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 20:16:59 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/05/27 14:29:45 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 19:04:47 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-t_lexer	*init_list(t_lexer *list)
-{
-	list = ft_calloc(sizeof(t_lexer), 1);
-	if (!list)
-		return (NULL);
-	return (list);
-}
 
 t_compo	*new_comp(char *content, int i, enum e_state state, enum e_type type)
 {
@@ -37,27 +29,30 @@ t_compo	*new_comp(char *content, int i, enum e_state state, enum e_type type)
 	return (new);
 }
 
-void	add_to_list(t_lexer *lst, t_compo *new)
+void	add_to_list(t_compo **lst, t_compo *new)
 {
-	if (!lst->head)
-		lst->head = new;
+	t_compo	*tmp;
+
+	if (!*lst)
+		*lst = new;
 	else
 	{
-		lst->tail->next = new;
-		new->prev = lst->tail;
+		tmp = *lst;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+		new->prev = tmp;
 	}
-	lst->tail = new;
-	lst->size++;
 }
 
-void	free_list(t_lexer *list)
+void	free_list(t_compo *list)
 {
 	t_compo	*current;
 	t_compo	*next;
 
 	if (!list)
 		return ;
-	current = list->head;
+	current = list;
 	while (current)
 	{
 		next = current->next;
@@ -65,5 +60,4 @@ void	free_list(t_lexer *list)
 		free(current);
 		current = next;
 	}
-	free(list);
 }

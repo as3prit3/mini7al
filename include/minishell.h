@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/05/27 18:51:18 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 18:52:49 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,21 @@ typedef struct s_compo
 	struct s_compo	*prev;
 }			t_compo;
 
-typedef struct s_lexer
-{
-	t_compo	*head;
-	t_compo	*tail;
-	int		size;
-}			t_lexer;
-
 	/*lexer_utils*/
 bool	is_special(char c);
-t_lexer	*init_list(t_lexer *list);
 t_compo	*new_comp(char *content, int i, enum e_state state, enum e_type type);
-void	add_to_list(t_lexer *lst, t_compo *new);
-void	free_list(t_lexer *list);
+void	add_to_list(t_compo **lst, t_compo *new);
+void	free_list(t_compo *list);
 
 	/*lexer*/
-int		get_word(t_lexer *list, char *line, enum e_state state);
-void	get_quote(t_lexer *list, char *line, enum e_state *state);
-int		get_redirection(t_lexer *list, char *line, int i, enum e_state state);
-int		get_env(t_lexer *list, char *line, enum e_state state);
-t_lexer	*lexer(char *line);
+int		get_word(t_compo **list, char *line, enum e_state state);
+void	get_quote(t_compo **list, char *line, enum e_state *state);
+int		get_redirection(t_compo **list, char *line, int i, enum e_state state);
+int		get_env(t_compo **list, char *line, enum e_state state);
+t_compo	*lexer(char *line);
 
 	/*syntax check*/
-bool	check_syntax(t_lexer *tokenes_lst);
+bool	check_syntax(t_compo *tokenes_lst);
 t_compo	*skip_spaces(t_compo *node, int direction);
 bool	is_redir(enum e_type type);
 #endif

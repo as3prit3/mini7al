@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:08:49 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/05/27 19:10:52 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/04 18:53:33 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ static bool	check_quote_syn(t_compo **node, enum e_type type)
 	return (false);
 }
 
-bool	check_syntax(t_lexer *tokenes_lst)
+bool	check_syntax(t_compo *tokenes_lst)
 {
 	t_compo	*node;
 
-	node = tokenes_lst->head;
+	node = tokenes_lst;
 	while (node)
 	{
 		if (node->type == PIPE)
