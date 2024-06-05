@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:14:20 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/05 13:29:16 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/05 19:44:46 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int main()
 	char	*line;
 	t_data	data;
 
+	data = (t_data){0};
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{

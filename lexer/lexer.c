@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 16:26:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/04 19:04:10 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/05 19:50:25 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_compo	*lexer(char *line)
 	tokens_lst = NULL;
 	while (line[i])
 		i = tokenize(&tokens_lst, line, i, &state);
-	print(tokens_lst);
+	// print(tokens_lst);
 	free(line);
 	return (tokens_lst);
 }
