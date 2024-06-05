@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/04 19:15:54 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:01:34 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct s_data
 	t_cmd	*cmd;
 	t_env	*envp;
 	t_compo	*tokens;
-	t_list	lst_cmd;
+	t_list	*lst_cmd;
 }			t_data;
 
 	/*lexer_utils*/
@@ -95,4 +95,9 @@ t_compo	*lexer(char *line);
 bool	check_syntax(t_compo *tokenes_lst);
 t_compo	*skip_spaces(t_compo *node, int direction);
 bool	is_redir(enum e_type type);
+
+	/*parsing utils*/
+
+	/*parsing*/
+void	parse(t_data *data, t_compo *token);
 #endif

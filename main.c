@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:14:20 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/04 19:16:48 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/05 13:29:16 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int main()
 		data.tokens = lexer(line);
 		if (!check_syntax(data.tokens))
 		{
+			parse(&data, data.tokens);
 			printf("procced to parsing then execution\n");
 		}
 		free_list(data.tokens);

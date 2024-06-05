@@ -6,14 +6,15 @@
 #    By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/24 15:11:31 by hhadhadi          #+#    #+#              #
-#    Updated: 2024/05/27 19:15:58 by hhadhadi         ###   ########.fr        #
+#    Updated: 2024/06/05 13:29:49 by hhadhadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CFILES = main.c ./lexer/lexer.c ./lexer/lexer_utils.c ./lexer/lexer_utils2.c \
-		./syntax/syntax.c ./syntax/syntax_utils.c
+		./syntax/syntax.c ./syntax/syntax_utils.c \
+		./parsing/parse.c
 
 OBJ = $(CFILES:.c=.o)
 
