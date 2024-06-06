@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:18:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/05 19:50:53 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/06 16:07:02 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,36 @@ char	*parse_word(t_compo **token)
 	return (str);
 }
 
+char	*parse_quote(t_data *data, t_compo **tok, enum e_type type)
+{
+	char	*str;
+	char	*tmp;
+
+	(void)	data;
+	str = NULL;
+	*tok = (*tok)->next;
+	while (*tok)
+	{
+		if (!str)
+			str = ft_strdup("");
+		// if ((*tok)->next && (*tok)->type == type && (*tok)->next->type == type)
+		// 	*tok = (*tok)->next;
+		if ((*tok)->type != type)
+		{
+			// if ((*tok)->type == ENV || (*tok)->type == EX_STATUS)
+				// parse_env(data, tok);
+			tmp = str;
+			str = ft_strjoin(tmp, (*tok)->content);
+			free(tmp);
+		}
+		else
+			break ;
+		if (*tok)
+			*tok = (*tok)->next;
+	}
+	return (str);
+}
+
 char	*parse_cmd(t_data *data, t_compo **token)
 {
 	char	*cmd;
@@ -30,8 +60,8 @@ char	*parse_cmd(t_data *data, t_compo **token)
 	{
 		if ((*token)->type == WORD)
 			cmd = parse_word(token);
-		// if ((*token)->type == SQUOTE || (*token)->type == DQUOTE)
-		// 	cmd = parse_quote(data, token, (*token)->type);
+		if ((*token)->type == SQUOTE || (*token)->type == DQUOTE)
+			cmd = parse_quote(data, token, (*token)->type);
 		// if ((*token)->type == ENV || (*token)->type == EX_STATUS)
 		// 	cmd = parse_env(token);
 	}
@@ -71,7 +101,7 @@ void	handel_cmd(t_data *data, t_compo **token)
 		else
 		{
 			if (!str && !ft_space((*token)->type))
-				str =ft_strdup("");
+				str = ft_strdup("");
 			if (!ft_space((*token)->type) && (*token)->state == GENERAL)
 				str = get_cmd(data, token, str, WORD);
 			if (str && (!*token || ft_space((*token)->type)
@@ -94,10 +124,10 @@ void	parse(t_data *data, t_compo *token)
 	while (token)
 	{
 		handel_cmd(data, &token);
-		if (token && token->type == PIPE)
-		{
-			// create the command list for the execution
-		}
+		// if (!token || token->type == PIPE)
+		// {
+		// 	// create the command list for the execution
+		// }
 		if (token)
 			token = token->next;
 	}

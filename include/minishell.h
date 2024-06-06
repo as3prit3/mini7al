@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/05 14:01:34 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:10:48 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 enum e_type
 {
 	WORD,
-	W_SPACE,
+	W_SPACE = ' ',
 	REDIR_IN,
 	REDIR_OUT,
 	APPEND,
