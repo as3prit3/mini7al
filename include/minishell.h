@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/06 13:10:48 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/06 19:46:46 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,16 @@ typedef struct s_data
 	t_compo	*tokens;
 	t_list	*lst_cmd;
 }			t_data;
+
+	/*execution struct*/
+typedef struct s_exec
+{
+	char	**n_env;
+	t_env	*env;
+}			t_exec;
+
+	/*execution*/
+void	create_env(t_exec *exec, char **env);
 
 	/*lexer_utils*/
 bool	is_special(char c);

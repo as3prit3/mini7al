@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:18:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/06 16:07:02 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/06 22:16:14 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,37 @@ char	*parse_word(t_compo **token)
 	return (str);
 }
 
+char	*parse_env(t_data *data, t_compo **token)
+{
+	char	*tmp;
+	t_env	*env;
+
+	tmp = (*token)->content;
+	env = data->envp;
+	if ((*token)->type == EX_STATUS)
+	{}	// return the exit status and put it in *token->content
+	else
+	{
+		while (env)
+		{
+			if (ft_strcmp(env->name, tmp + 1) == 0)
+			{
+				(*token)->content = ft_strdup(env->value);
+				break ;
+			}
+			env = env->next;
+		}
+		if (!env)
+			(*token)->content = ft_strdup("");
+	}
+	return (free(tmp), (*token)->content);
+}
+
 char	*parse_quote(t_data *data, t_compo **tok, enum e_type type)
 {
 	char	*str;
 	char	*tmp;
 
-	(void)	data;
 	str = NULL;
 	*tok = (*tok)->next;
 	while (*tok)
@@ -36,8 +61,8 @@ char	*parse_quote(t_data *data, t_compo **tok, enum e_type type)
 		// 	*tok = (*tok)->next;
 		if ((*tok)->type != type)
 		{
-			// if ((*tok)->type == ENV || (*tok)->type == EX_STATUS)
-				// parse_env(data, tok);
+			if ((*tok)->type == ENV || (*tok)->type == EX_STATUS)
+				parse_env(data, tok);
 			tmp = str;
 			str = ft_strjoin(tmp, (*tok)->content);
 			free(tmp);
@@ -49,6 +74,7 @@ char	*parse_quote(t_data *data, t_compo **tok, enum e_type type)
 	}
 	return (str);
 }
+
 
 char	*parse_cmd(t_data *data, t_compo **token)
 {
@@ -62,8 +88,8 @@ char	*parse_cmd(t_data *data, t_compo **token)
 			cmd = parse_word(token);
 		if ((*token)->type == SQUOTE || (*token)->type == DQUOTE)
 			cmd = parse_quote(data, token, (*token)->type);
-		// if ((*token)->type == ENV || (*token)->type == EX_STATUS)
-		// 	cmd = parse_env(token);
+		if ((*token)->type == ENV || (*token)->type == EX_STATUS)
+			cmd = parse_env(data, token);
 	}
 	return (cmd);
 }
@@ -81,9 +107,10 @@ char	*get_cmd(t_data *data, t_compo **token, char *str, enum e_type type)
 		tmp = str;
 		str = ft_strjoin(tmp, cmd);
 		free(tmp);
-		free(cmd);
 		if (str && (*token)->next && is_redir((*token)->next->type))
 			break ;
+		if ((*token)->type != ENV && (*token)->type != EX_STATUS)
+			free(cmd);
 		*token = (*token)->next;
 	}
 	return (str);

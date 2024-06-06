@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:14:20 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/05 19:44:46 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/06 19:43:52 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,17 @@ void	exc_sig(int sig)
 	rl_redisplay();
 }
 
-int main()
+int main(int ac, char **av, char **env)
 {
 	char	*line;
 	t_data	data;
+	t_exec	exec;
 
+	(void)ac;
+	(void)av;
 	data = (t_data){0};
+	create_env(&exec, env);
+	data.envp = exec.env;
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
