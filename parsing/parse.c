@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:18:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/06 22:16:14 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/07 17:06:51 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,32 @@ char	*get_cmd(t_data *data, t_compo **token, char *str, enum e_type type)
 	return (str);
 }
 
+// void	get_redir(t_data *data, t_compo **token, enum e_type type, char *str)
+// {
+// 	if (str)
+// 		ft_lstadd_back(&data->lst_cmd, ft_lstnew(str));
+// 	str = ft_strdup("");
+// 	*token = (*token)->next;
+// 	if (type == HERE_DOC)
+// 		here_doc(data, token);
+// 	else
+// 	{
+// 		if ((*token)->type == ENV)
+// 		{
+// 			if (data->expend)
+// 				free(data->expend);
+// 			data->expend = (*token)->content;
+// 		}
+// 		str = get_cmd(data, token, str, type);
+// 		if (type == REDIR_IN)
+// 			in_file(data, str);
+// 		else if (type == REDIR_OUT)
+// 			out_file(data, str);
+// 		else if (type == APPEND)
+// 			append(data, str);
+// 	}
+// }
+
 void	handel_cmd(t_data *data, t_compo **token)
 {
 	char	*str;
@@ -124,15 +150,15 @@ void	handel_cmd(t_data *data, t_compo **token)
 	while (*token && !((*token)->type == PIPE && (*token)->state == GENERAL))
 	{
 		if (is_redir((*token)->type))
-		{}
+		{}	//get_redir(data, token, (*token)->type, str);
 		else
 		{
 			if (!str && !ft_space((*token)->type))
 				str = ft_strdup("");
 			if (!ft_space((*token)->type) && (*token)->state == GENERAL)
 				str = get_cmd(data, token, str, WORD);
-			if (str && (!*token || ft_space((*token)->type)
-				|| (*token)->type == PIPE))
+			if ((str && (!*token || ft_space((*token)->type)))
+				|| (*token)->type == PIPE)
 			{
 				ft_lstadd_back(&data->lst_cmd, ft_lstnew(str));
 				str = NULL;

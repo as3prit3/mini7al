@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:42:08 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/06 22:14:52 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/07 17:05:23 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,29 +77,49 @@ int	env_len(t_env *env)
 
 }
 
-char	**list_to_tab(t_env **env)
-{
-	char	**tab;
-	t_env	*tmp;
-	int		i;
-	char	*str;
+// char	**list_to_tab(t_env **env)
+// {
+// 	char	**tab;
+// 	t_env	*tmp;
+// 	int		i;
+// 	char	*str;
 
-	i = env_len(*env);
-	tab = malloc(sizeof(char *) * (i + 1));
-	if (!tab)
+// 	i = env_len(*env);
+// 	tab = malloc(sizeof(char *) * (i + 1));
+// 	if (!tab)
+// 		return (NULL);
+// 	i = 0;
+// 	tmp = *env;
+// 	while (tmp)
+// 	{
+// 		t_env *next = tmp->next;
+// 		str = ft_strjoin(tmp->name, "=");
+// 		tab[i++] = ft_strjoin(str, tmp->value);
+// 		free(str);
+// 		tmp = next;
+// 	}
+// 	tab[i] = NULL;
+// 	return (tab);
+// }
+
+char	**p_get_env(t_exec *exec, char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	exec->n_env = (char **)malloc(sizeof(char*) * (i + 1));
+	if (!exec->n_env)
 		return (NULL);
 	i = 0;
-	tmp = *env;
-	while (tmp)
+	while (env && env[i])
 	{
-		t_env *next = tmp->next;
-		str = ft_strjoin(tmp->name, "=");
-		tab[i++] = ft_strjoin(str, tmp->value);
-		free(str);
-		tmp = next;
+		exec->n_env[i] = ft_strdup(env[i]);
+		i++;
 	}
-	tab[i] = NULL;
-	return (tab);
+	exec->n_env[i] = NULL;
+	return (exec->n_env);
 }
 
 void	create_env(t_exec *exec, char **env)
@@ -110,12 +130,11 @@ void	create_env(t_exec *exec, char **env)
 
 	i = -1;
 	exec->env = NULL;
-	while (env[++i])
+	while (env && env[++i])
 	{
 		name = get_name(env[i], '=');
 		value = ft_strchr(env[i], '=') + 1;
 		add_env(&exec->env, new_env(name, value));
 	}
-	exec->n_env = list_to_tab(&exec->env);
+	exec->n_env = p_get_env(exec, env);
 }
-

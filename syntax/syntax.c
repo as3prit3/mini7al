@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:08:49 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/04 18:53:33 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/07 13:11:22 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,14 @@ static bool	check_pipe_syn(t_compo *node)
 	t_compo	*prev;
 	t_compo	*next;
 
+	if (node->next->type == PIPE)
+	{
+		print_synth_err("'||'");
+		return (1);
+	}
 	prev = skip_spaces(node->prev, 0);
 	next = skip_spaces(node->next, 1);
-	if (!prev || !next || is_redir(prev->type))
+	if (!prev || !next || is_redir(prev->type) || next->type == PIPE)
 	{
 		print_synth_err("'|'");
 		return (1);
