@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/07 14:54:56 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/07 19:02:24 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef struct s_data
 	t_compo	*tokens;
 	t_list	*lst_cmd;
 	char	*expend;
+	int		in;
+	int		out;
 }			t_data;
 
 	/*execution struct*/

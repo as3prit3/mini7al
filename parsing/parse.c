@@ -6,7 +6,7 @@
 /*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:18:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/07 17:06:51 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/08 16:08:34 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,31 +116,39 @@ char	*get_cmd(t_data *data, t_compo **token, char *str, enum e_type type)
 	return (str);
 }
 
-// void	get_redir(t_data *data, t_compo **token, enum e_type type, char *str)
-// {
-// 	if (str)
-// 		ft_lstadd_back(&data->lst_cmd, ft_lstnew(str));
-// 	str = ft_strdup("");
-// 	*token = (*token)->next;
-// 	if (type == HERE_DOC)
-// 		here_doc(data, token);
-// 	else
-// 	{
-// 		if ((*token)->type == ENV)
-// 		{
-// 			if (data->expend)
-// 				free(data->expend);
-// 			data->expend = (*token)->content;
-// 		}
-// 		str = get_cmd(data, token, str, type);
-// 		if (type == REDIR_IN)
-// 			in_file(data, str);
-// 		else if (type == REDIR_OUT)
-// 			out_file(data, str);
-// 		else if (type == APPEND)
-// 			append(data, str);
-// 	}
-// }
+void	in_file(t_data *data, char *str)
+{
+	data->in = open(str, O_RDONLY, 0644);
+	//if (data->in == -1)
+		// redir_error(data, str);
+}
+
+void	get_redir(t_data *data, t_compo **token, enum e_type type, char *str)
+{
+	if (str)
+		ft_lstadd_back(&data->lst_cmd, ft_lstnew(str));
+	str = ft_strdup("");
+	*token = (*token)->next;
+	if (type == HERE_DOC)
+	{}	// here_doc(data, token);
+	else
+	{
+		if ((*token)->type == ENV)
+		{
+			if (data->expend)
+				free(data->expend);
+			data->expend = (*token)->content;
+		}
+		str = get_cmd(data, token, str, type);
+		if (type == REDIR_IN)
+			in_file(data, str);
+		// else if (type == REDIR_OUT)
+		// 	out_file(data, str);
+		// else if (type == APPEND)
+		// 	append(data, str);
+	}
+	free(str);
+}
 
 void	handel_cmd(t_data *data, t_compo **token)
 {
@@ -150,7 +158,7 @@ void	handel_cmd(t_data *data, t_compo **token)
 	while (*token && !((*token)->type == PIPE && (*token)->state == GENERAL))
 	{
 		if (is_redir((*token)->type))
-		{}	//get_redir(data, token, (*token)->type, str);
+			get_redir(data, token, (*token)->type, str);
 		else
 		{
 			if (!str && !ft_space((*token)->type))
@@ -171,24 +179,84 @@ void	handel_cmd(t_data *data, t_compo **token)
 	}
 }
 
+t_cmd	*ft_cmdnew(t_cmd *cmd)
+{
+	t_cmd	*new;
+
+	new = malloc(sizeof(t_cmd));
+	new->args = cmd->args;
+	new->in_file = cmd->in_file;
+	new->out_file = cmd->out_file;
+	new->next = NULL;
+	return (new);
+}
+
+void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
+{
+	t_cmd	*tmp;
+
+	if (!*cmd)
+	{
+		*cmd = new;
+		return ;
+	}
+	tmp = *cmd;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void	create_cmd(t_data *data)
+{
+	t_list	*tmp;
+	t_cmd	*cmd;
+	char	**args;
+	int		i;
+
+	i = 0;
+	tmp = data->lst_cmd;
+	args = malloc(sizeof(char *) * (ft_lstsize(data->lst_cmd) + 1));
+	while (tmp)
+	{
+		args[i++] = tmp->content;
+		tmp = tmp->next;
+	}
+	args[i] = NULL;
+	cmd = ft_calloc(sizeof(t_cmd), 1);
+	cmd->args = args;
+	cmd->in_file = data->in;
+	cmd->out_file = data->out;
+	ft_cmdadd_back(&data->cmd, ft_cmdnew(cmd));
+	data->lst_cmd = NULL;
+	data->in = 0;
+	data->out = 1;
+	// free(args);
+	// free(cmd);
+}
+
 void	parse(t_data *data, t_compo *token)
 {
 	token = skip_spaces(token, 1);
 	while (token)
 	{
 		handel_cmd(data, &token);
-		// if (!token || token->type == PIPE)
-		// {
-		// 	// create the command list for the execution
-		// }
+		if (!token || token->type == PIPE)
+		{
+			// create the command list for the execution
+			create_cmd(data);
+		}
 		if (token)
 			token = token->next;
 	}
-	t_list *tmp = data->lst_cmd;
-	while (tmp)
+	t_cmd	*cmd = data->cmd;
+	while (cmd)
 	{
-		printf("args: %s\n", (char *)tmp->content);
-		tmp = tmp->next;
+		int i = 0;
+		while (cmd->args[i])
+			printf("%s\n", cmd->args[i++]);
+		printf("in: %d\n", cmd->in_file);
+		printf("out: %d\n", cmd->out_file);
+		cmd = cmd->next;
 	}
 	ft_lstclear(&data->lst_cmd, &free);
 }
