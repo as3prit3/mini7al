@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hhadhadi <marvin@42>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:56:40 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/07 19:02:24 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/25 19:49:47 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ t_compo	*skip_spaces(t_compo *node, int direction);
 bool	is_redir(enum e_type type);
 
 	/*parsing utils*/
+void	ft_cmd_clear(t_cmd **lst);
+// void	free_2d_array(t_cmd *lst, void (*del)(char **));
 
 	/*parsing*/
 void	parse(t_data *data, t_compo *token);

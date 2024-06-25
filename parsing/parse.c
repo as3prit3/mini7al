@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hhadhadi <marvin@42>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 13:18:38 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/08 16:08:34 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/25 19:53:59 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ char	*get_cmd(t_data *data, t_compo **token, char *str, enum e_type type)
 		tmp = str;
 		str = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (str && (*token)->next && is_redir((*token)->next->type))
-			break ;
 		if ((*token)->type != ENV && (*token)->type != EX_STATUS)
 			free(cmd);
+		if (str && (*token)->next && is_redir((*token)->next->type))
+			break ;
 		*token = (*token)->next;
 	}
 	return (str);
@@ -179,14 +179,26 @@ void	handel_cmd(t_data *data, t_compo **token)
 	}
 }
 
-t_cmd	*ft_cmdnew(t_cmd *cmd)
+t_cmd	*ft_cmdnew(int in, int out, t_list *lst_cmd)
 {
 	t_cmd	*new;
+	t_list	*tmp;
+	char	**args;
+	int		i;
 
+	i = 0;
+	tmp = lst_cmd;
+	args = malloc(sizeof(char *) * (ft_lstsize(lst_cmd) + 1));
+	while (tmp)
+	{
+		args[i++] = tmp->content;
+		tmp = tmp->next;
+	}
+	args[i] = NULL;
 	new = malloc(sizeof(t_cmd));
-	new->args = cmd->args;
-	new->in_file = cmd->in_file;
-	new->out_file = cmd->out_file;
+	new->args = args;
+	new->in_file = in;
+	new->out_file = out;
 	new->next = NULL;
 	return (new);
 }
@@ -208,30 +220,35 @@ void	ft_cmdadd_back(t_cmd **cmd, t_cmd *new)
 
 void	create_cmd(t_data *data)
 {
-	t_list	*tmp;
-	t_cmd	*cmd;
-	char	**args;
-	int		i;
-
-	i = 0;
-	tmp = data->lst_cmd;
-	args = malloc(sizeof(char *) * (ft_lstsize(data->lst_cmd) + 1));
-	while (tmp)
-	{
-		args[i++] = tmp->content;
-		tmp = tmp->next;
-	}
-	args[i] = NULL;
-	cmd = ft_calloc(sizeof(t_cmd), 1);
-	cmd->args = args;
-	cmd->in_file = data->in;
-	cmd->out_file = data->out;
-	ft_cmdadd_back(&data->cmd, ft_cmdnew(cmd));
-	data->lst_cmd = NULL;
+	ft_cmdadd_back(&data->cmd, ft_cmdnew(data->in, data->out, data->lst_cmd));
 	data->in = 0;
 	data->out = 1;
-	// free(args);
-	// free(cmd);
+}
+
+void	free_2d_array(t_cmd *lst, void (*del)(char **))
+{
+	if (lst && del)
+	{
+		del(lst->args);
+		free(lst);
+	}
+}
+
+void	ft_cmd_clear(t_cmd **lst)
+{
+	t_cmd	*tmp;
+
+	if (lst)
+	{
+		while (*lst)
+		{
+			tmp = (*lst)->next;
+			int	i = 0;
+			while ((*lst)->args[i])
+				free((*lst)->args[i++]);
+			*lst = tmp;
+		}
+	}
 }
 
 void	parse(t_data *data, t_compo *token)
@@ -244,19 +261,18 @@ void	parse(t_data *data, t_compo *token)
 		{
 			// create the command list for the execution
 			create_cmd(data);
+			t_cmd	*cmd = data->cmd;
+			int i = 0;
+			while (cmd)
+			{
+				while (cmd->args[i])
+					printf("%s\n", cmd->args[i++]);
+					// printf("in: %d\n", cmd->in_file);
+					// printf("out: %d\n", cmd->out_file);
+				cmd = cmd->next;
+			}
 		}
 		if (token)
 			token = token->next;
 	}
-	t_cmd	*cmd = data->cmd;
-	while (cmd)
-	{
-		int i = 0;
-		while (cmd->args[i])
-			printf("%s\n", cmd->args[i++]);
-		printf("in: %d\n", cmd->in_file);
-		printf("out: %d\n", cmd->out_file);
-		cmd = cmd->next;
-	}
-	ft_lstclear(&data->lst_cmd, &free);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hhadhadi <marvin@42>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:14:20 by hhadhadi          #+#    #+#             */
-/*   Updated: 2024/06/07 15:52:09 by hhadhadi         ###   ########.fr       */
+/*   Updated: 2024/06/25 19:53:03 by hhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ int main(int ac, char **av, char **env)
 			parse(&data, data.tokens);
 			printf("procced to parsing then execution\n");
 		}
+		// ft_cmd_clear(&data.cmd);
+		ft_lstclear(&data.lst_cmd, free);
 		free_list(data.tokens);
+
 	}
 }
